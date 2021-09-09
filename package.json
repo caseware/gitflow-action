@@ -25,11 +25,11 @@
     "lint": "eslint src/main.js"
   },
   "dependencies": {
-    "@actions/core": "1.2.7",
-    "@actions/github": "3.0.0"
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
-    "eslint": "7.9.0",
-    "@zeit/ncc": "0.22.3"
+    "@vercel/ncc": "^0.30.0",
+    "eslint": "7.9.0"
   }
 }
