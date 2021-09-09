@@ -19,6 +19,12 @@ inputs:
   master:
     description: The `master` branch.
     default: master
+  master-target:
+    description: The destination of pull requests created for changes in `master`
+    default: dev
+  release-target:
+    description: The destination of pull requests created for changes in `release`
+    default: master
   label:
     description: The pull request label.
     default: gitflow

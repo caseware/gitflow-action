@@ -5,6 +5,8 @@ const token = core.getInput("github-token", { required: true }),
     releaseBranch = getBranch("release"),
     devBranch = getBranch("dev"),
     masterBranch = getBranch("master"),
+    masterTarget = getInput("master-target", devBranch),
+    releaseTarget = getInput("release-target", masterBranch),
     label = getInput("label", "gitflow"),
     auto_merge = getInput("auto-merge", "true"),
     require_merge = getInput("require-merge", "false") === "true",
@@ -24,8 +26,8 @@ function getBranch(name) {
 
 function getTarget(head) {
     switch (head) {
-        case releaseBranch: return masterBranch;
-        case masterBranch: return devBranch;
+        case releaseBranch: return releaseTarget;
+        case masterBranch: return masterTarget;
         default: return null;
     }
 }
