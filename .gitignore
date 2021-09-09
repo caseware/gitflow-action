@@ -44,6 +44,9 @@ typings/
 # Optional npm cache directory
 .npm
 
+# intelliJ settings
+.idea
+
 # Optional eslint cache
 .eslintcache
 
