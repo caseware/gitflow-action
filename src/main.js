@@ -150,7 +150,6 @@ async function push() {
         });
         core.info(`Label ${label} added to #${pull_number}.`);
         debug(labelsResponse.data);
-        await assign(pull_number, context.actor);
     }
     if (isAutoMergeEvent("push")) {
         await merge(pull_number);
@@ -176,6 +175,7 @@ async function merge(pull_number) {
         } else {
             core.info("Merge failed.");
         }
+        await assign(pull_number, context.actor);
         debug(err);
     }
 }
