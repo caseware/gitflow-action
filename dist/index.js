@@ -6370,7 +6370,7 @@ function isAutoMergeEvent(eventName) {
 
 async function run() {
     try {
-        core.debug(JSON.stringify(context.payload));
+        debug(context.payload);
         switch (github.context.eventName) {
             case "push":
                 await push();
@@ -6404,7 +6404,7 @@ async function run() {
                             repo,
                         }),
                             data = pullResponse.data;
-                        core.debug(JSON.stringify(data));
+                        debug(data);
                         if (data.labels.map(labelMap).includes(label)) {
                             await merge(element.number);
                         }
@@ -6422,7 +6422,7 @@ async function run() {
     catch (err) {
         //Even if it's a valid situation, we want to fail the action in order to be able to find the issue and fix it.
         core.setFailed(err.message);
-        core.debug(JSON.stringify(err));
+        debug(err);
     }
 }
 
@@ -6444,7 +6444,7 @@ async function push() {
         repo,
         state: "open",
     });
-    core.debug(JSON.stringify(pulls.data));
+    debug(pulls.data);
     let pull_number;
     if (pulls.data.length === 1) {
         const data = pulls.data[0];
@@ -6467,7 +6467,7 @@ async function push() {
             creationData = creationResponse.data;
         pull_number = creationData.number;
         core.info(`Pull request #${pull_number} created.`);
-        core.debug(JSON.stringify(creationData));
+        debug(creationData);
         const labelsResponse = await client.issues.addLabels({
             issue_number: pull_number,
             labels: [label],
@@ -6475,7 +6475,7 @@ async function push() {
             repo,
         });
         core.info(`Label ${label} added to #${pull_number}.`);
-        core.debug(JSON.stringify(labelsResponse.data));
+        debug(labelsResponse.data);
     }
     if (isAutoMergeEvent("push")) {
         await merge(pull_number);
@@ -6493,7 +6493,7 @@ async function merge(pull_number) {
             repo,
         });
         core.info(`Pull request #${pull_number} merged.`);
-        core.debug(JSON.stringify(mergeResponse.data));
+        debug(mergeResponse.data);
     }
     catch (err) {
         if (require_merge) {
@@ -6501,7 +6501,20 @@ async function merge(pull_number) {
         } else {
             core.info("Merge failed.");
         }
-        core.debug(err);
+        debug(err);
+    }
+}
+
+function debug(message) {
+    if (core.isDebug()) {
+        if (typeof message !== "string") {
+            try {
+                message = JSON.stringify(message);
+            } catch (err) {
+                return;
+            }
+        }
+        core.debug(message);
     }
 }
 
