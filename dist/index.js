@@ -6476,6 +6476,7 @@ async function push() {
         });
         core.info(`Label ${label} added to #${pull_number}.`);
         debug(labelsResponse.data);
+        await assign(pull_number, context.actor);
     }
     if (isAutoMergeEvent("push")) {
         await merge(pull_number);
@@ -6502,6 +6503,21 @@ async function merge(pull_number) {
             core.info("Merge failed.");
         }
         debug(err);
+    }
+}
+
+async function assign(pull_number, userName) {
+    core.info(`Assigning user ${userName} to the pull request.`);
+    try {
+        const assignResponse = await client.issues.addAssignees({
+            owner,
+            repo,
+            issue_number: pull_number,
+            assignees: [userName]
+        });
+        debug(assignResponse.data);
+    } catch (err) {
+        core.info('Failed to assign user');
     }
 }
 
